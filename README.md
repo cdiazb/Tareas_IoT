@@ -3,21 +3,8 @@ Repositorio para las tareas del curso CC5326: Diseño de Sistemas de Internet de
 
 
 ## Tarea 1:
-Estructura del Proyecto
-|
 
-|Raspberry -|
+Se busca crear conexión entre el ESP32 y una Raspberry Pi, para luego poder enviar los datos leídos por el ESP32 a través de TCP o UDP.
+Para lograr esto se deberá poder conectar via wifi el ESP32 a la Rpi, programar sockets clientes UDP y TCP para el ESP32, y sockets servidor TCP y UDP para la Rpi.
 
---- Server TCP
-
---- Server UDP
-
-
-
-|ESP32 -----|
-
---- Datos
-
---- Cliente TCP
-
---- Cliente UDP
+Para esta tarea se deberén crear los datos de manera sintética y los paquetes enviados deberán seguir la forma especificada en el enunciado.
