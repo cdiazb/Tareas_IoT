@@ -1,35 +1,48 @@
-#include <sensors.c>
+#include "sensors.c"
 #include <math.h>
 #include <stdlib.h>
 #include "esp_system.h"
 #include "esp_mac.h"
 #include "esp_log.h"
 
-//Genera el header de un mensaje, con la MAC, el protocolo, status, y el largo del mensaje.
+// Genera el header de un mensaje, con la MAC, el protocolo, status, y el largo del mensaje.
+// The C library function void *memcpy(void *dest, const void *src, size_t n) copies n 
+// characters from memory area src to memory area dest.
 char* header(char protocol, char transportLayer){
 	char* head = malloc(12);
 
+	// 2 bytes para ID Device
     char ID = 'D1'
     memcpy((void*) &(head[0]), (void*) MACaddrs, 2);
+	
+	// 6 bytes para MAC Adress
 	uint8_t* MACaddrs = malloc(6);
 	esp_efuse_mac_get_default(MACaddrs);
 	memcpy((void*) &(head[2]), (void*) MACaddrs, 6);
+	free(MACaddrs);
+
+	// 1 byte para Transport Layer
     head[8]= transportLayer;
+
+	// 1 byte para ID Protocol
 	head[9]= protocol;
+
+	// 2 bytes para Length Message
 	unsigned short dataLen = dataLength(protocol);
 	memcpy((void*) &(head[10]), (void*) &dataLen, 2);
-	free(MACaddrs);
+
 	return head;
 }
 
-unsigned short lengmsg[6] = {2, 6, 16, 20, 44, 12016};
+// Largo de los mensajes incluyendo el header
+unsigned short lengmsg[5] = {6, 16, 20, 44, 24016};
 
-unsigned short dataLength(char protocol){
+unsigned short  (char protocol){
     return lengmsg[ (unsigned int) protocol]-1;
 }
 
 unsigned short messageLength(char protocol){
-    return 1+12+dataLength(protocol);
+    return 13 + dataLength(protocol);
 }
 
 char* mensaje (char protocol, char transportLayer){
