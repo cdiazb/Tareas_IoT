@@ -36,13 +36,13 @@ def parseData(header, packet):
     return None if dataD is None else {**header, **dataD}
 
 def protUnpack(protocol:int, data):
-    protocol_unpack = ["<B", "<Bl", "<BlBfBf"]
+    protocol_unpack = ["<B", "<BB4B", "<BB4BB4BBf", "<BB4BB4BBff", "<BB4BB4BBff6f", "<BB4BB4BBf2000f2000f2000f"] #ToDo verificar el formato correcto para timestamp
     return unpack(protocol_unpack[protocol], data)
 
 def headerDict(data):
-    M1, M2, M3, M4, M5, M6, protocol, transport_layer, leng_msg = unpack("<6B2BH", data)
+    ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBBH", data)
     MAC = ".".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
-    return {"MAC":MAC, "protocol":protocol, "transport_layer":transport_layer, "length":leng_msg}
+    return {"ID_Device":ID_Device, "MAC":MAC, "protocol":protocol, "transport_layer":transport_layer, "length":leng_msg}
 
 def dataDict(protocol:int, data):
     if protocol not in [0, 1, 2, 3, 4, 5]:
@@ -54,11 +54,11 @@ def dataDict(protocol:int, data):
             return {key:val for (key,val) in zip(keys, unp)}
         return p
     p00 = ["OK"]
-    p0 = ["Batt_level", "Timestamp"]
-    p1 = ["Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co"]
-    p2 = ["Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS"]
-    p3 = ["Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS", "Amp_X", "Frec_X", "Amp_Y", "Frec_Y", "Amp_Z", "Frec_Z"]
-    p4 = ["Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "Acc_X", "Acc_Y", "Acc_Z"]
+    p0 = ["val" ,"Batt_level", "Timestamp"]
+    p1 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co"]
+    p2 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS"]
+    p3 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS", "Amp_X", "Frec_X", "Amp_Y", "Frec_Y", "Amp_Z", "Frec_Z"]
+    p4 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "Acc_X", "Acc_Y", "Acc_Z"]
     p = [p00, p0, p1, p2, p3, p4]
 
     try:
