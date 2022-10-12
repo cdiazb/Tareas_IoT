@@ -1,7 +1,7 @@
 import socket
-from struct import unpack, pack
+#from struct import unpack, pack
 
-from matplotlib import rc_params_from_file
+#from matplotlib import rc_params_from_file
 from Desempaquetamiento import *
 from TCPRaspServer import *
 from UDPRaspServer import *
@@ -25,14 +25,16 @@ while True:
     print(f'Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}')
     id_protocol = 0 #ToDo obtener valor de la base de datos
     transport_layer = 0 #ToDo obtener valor de la base de datos
-    config = response(False,transport_layer,id_protocol)
+
+    config = response(False,transport_layer,id_protocol) #ToDo definir valores que empaqueta la funcion response
+
     conn.send(config.encode())
     data = conn.recv(1024)
     #ToDo manejar protocolo p00
     conn.close()
     break
 
-while STOP:
+while STOP: # definir como detener el loop
     if transport_layer == '1':
         TCP_connection(TCP_HOST,TCP_PORT)
 

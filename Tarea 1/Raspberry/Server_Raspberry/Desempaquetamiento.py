@@ -36,7 +36,7 @@ def parseData(header, packet):
     return None if dataD is None else {**header, **dataD}
 
 def protUnpack(protocol:int, data):
-    protocol_unpack = ["<B", "<BB4B", "<BB4BB4BBf", "<BB4BB4BBff", "<BB4BB4BBff6f", "<BB4BB4BBf2000f2000f2000f"] #ToDo verificar el formato correcto para timestamp
+    protocol_unpack = ["<B", "<BB4B", "<BB4Bf4BBf", "<BB4Bf4BBff", "<BB4Bf4BBff6f", "<BB4Bf4BBf2000f2000f2000f"] #ToDo verificar el formato correcto para timestamp
     return unpack(protocol_unpack[protocol], data)
 
 def headerDict(data):
