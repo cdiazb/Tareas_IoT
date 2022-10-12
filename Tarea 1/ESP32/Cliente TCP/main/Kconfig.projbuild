@@ -1,4 +1,4 @@
-menu "Example Configuration"
+menu "Configuration"
 
     choice EXAMPLE_IP_MODE
         prompt "IP Version"
@@ -59,7 +59,7 @@ menu "Example Configuration"
         prompt "Socket example source"
         default EXAMPLE_SOCKET_IP_INPUT_STRING
         help
-            Selects the input source of the IP used in the example.
+            Selects the input source of the IP used.
 
         config EXAMPLE_SOCKET_IP_INPUT_STRING
             bool "From string"
