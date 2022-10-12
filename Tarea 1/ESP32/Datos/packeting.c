@@ -5,10 +5,19 @@
 #include "esp_mac.h"
 #include "esp_log.h"
 
+// Largo de la data
+uint16_t DATALENGTH[5] = {6, 16, 20, 44, 24016};
+
+// Largo de los mensajes incluyendo el header
+uint16_t messageLength(uint16_t protocol){
+    return (uint16_t) (12 + DATALENGTH[protocol]);
+}
+
 // Genera el header de un mensaje, con la MAC, el protocolo, status, y el largo del mensaje.
 // The C library function void *memcpy(void *dest, const void *src, size_t n) copies n 
 // characters from memory area src to memory area dest.
-char* header(char protocol, char transportLayer){
+char* header(uint8_t protocol, uint8_t transportLayer){
+	// 12 bytes en total para el header
 	char* head = malloc(12);
 
 	// 2 bytes para ID Device
@@ -22,61 +31,57 @@ char* header(char protocol, char transportLayer){
 	free(MACaddrs);
 
 	// 1 byte para Transport Layer
-    head[8]= transportLayer;
+	memcpy((void*) &(head[8]), (void*) &transportLayer, 1);
 
 	// 1 byte para ID Protocol
-	head[9]= protocol;
+	memcpy((void*) &(head[9]), (void*) &protocol, 1);
 
 	// 2 bytes para Length Message
-	unsigned short dataLen = dataLength(protocol);
+	uint16_t dataLen = DATALENGTH[protocol];
 	memcpy((void*) &(head[10]), (void*) &dataLen, 2);
 
 	return head;
 }
 
-// Largo de los mensajes incluyendo el header
-unsigned short lengmsg[5] = {6, 16, 20, 44, 24016};
-
-unsigned short  (char protocol){
-    return lengmsg[ (unsigned int) protocol]-1;
-}
-
-unsigned short messageLength(char protocol){
-    return 13 + dataLength(protocol);
-}
-
-char* mensaje (char protocol, char transportLayer){
+// Creamos el mensaje dependiendo del protocolo que necesitamos y la capa de transporte(TCP o UDP)
+char* mensaje(uint8_t protocol, uint8_t transportLayer){
+	// Alocamos memoria para el mensaje
 	char* mnsj = malloc(messageLength(protocol));
+	// Marcamos el final del mensaje
 	mnsj[messageLength(protocol)-1]= '\0';
+	// Creamos el header y copiamos su contenido al mensaje y liberamos memoria
 	char* hdr = header(protocol, transportLayer);
+	memcpy((void*) mnsj, (void*) hdr, 12);
+	free(hdr);
+
 	char* data;
+	// Dependiendo del protocolo crearemos los datos sinteticos, protocolos pueden ser o-4 de no ser ninguno de estos se considera como protocolo 0.
 	switch (protocol) {
 		case 0:
-			data = dataprotocol00();
-			break;
-		case 1:
 			data = dataprotocol0();
 			break;
-		case 2:
+		case 1:
 			data = dataprotocol1();
 			break;
-		case 3:
+		case 2:
 			data = dataprotocol2();
 			break;
-        case 4:
+		case 3:
 			data = dataprotocol3();
 			break;
-        case 5:
+        case 4:
 			data = dataprotocol4();
 			break;
 		default:
 			data = dataprotocol0();
 			break;
 	}
-	memcpy((void*) mnsj, (void*) hdr, 12);
-	memcpy((void*) &(mnsj[12]), (void*) data, dataLength(protocol));
-	free(hdr);
+
+	// Copiamos los contenidos de data al mensaje y luego liberamos memoria
+	memcpy((void*) &(mnsj[12]), (void*) data, DATALENGTH[protocol]);
 	free(data);
+	
+	// Entregamos el mensaje
 	return mnsj;
 }
 
