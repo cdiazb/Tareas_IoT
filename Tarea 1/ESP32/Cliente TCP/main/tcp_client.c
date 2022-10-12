@@ -80,7 +80,7 @@ static void tcp_client_task(void)
 
         while (1) {
             // Crearemos un mensaje segun el protocolo, de manera aleatoria
-            payload = create_message(protocol);
+            payload = create_message(protocol,0);
 
             int err = send(sock, payload, messageLength(protocol), 0);
             protocol = (protocol != 4) ? ++protocol : 0;
