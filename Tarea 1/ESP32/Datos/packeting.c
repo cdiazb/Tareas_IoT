@@ -23,6 +23,7 @@ char* header(char protocol, char transportLayer){
 }
 
 unsigned short lengmsg[6] = {2, 6, 16, 20, 44, 12016};
+
 unsigned short dataLength(char protocol){
     return lengmsg[ (unsigned int) protocol]-1;
 }

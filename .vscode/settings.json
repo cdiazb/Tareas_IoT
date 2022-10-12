@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "esp_event.h": "c",
+        "param.h": "c",
+        "stdlib.h": "c"
+    }
+}
