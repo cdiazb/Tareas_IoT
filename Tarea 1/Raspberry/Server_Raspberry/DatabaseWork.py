@@ -6,4 +6,4 @@ import sqlite3 as sql
 def dataSave(header, data):
     with sql.connect("DB.sqlite") as con:
         cur = con.cursor()
-        cur.execute('''insert into Info (MAC, Status, Protocol, Data1) values (?, ?, ?, ?)''', (header["MAC"], header["status"], header["protocol"], json.dumps(data)))
+        cur.execute('''insert into Info (MAC, Transport_layer, Protocol, Data1) values (?, ?, ?, ?)''', (header["MAC"], header["status"], header["protocol"], json.dumps(data)))

@@ -17,32 +17,36 @@ Usamos struct para pasar de un array de bytes a una lista de numeros/strings. (h
 '''
 
     
-def response(change:bool=False, status:int=255, protocol:int=255):
+def response(change:bool=False, transport_layer:int=255):
     OK = 1
     CHANGE = 1 if change else 0
-    return pack("<BBBB", OK, CHANGE, status, protocol)
+    return pack("<BBBB", OK, CHANGE, transport_layer)
 
-def parseData(packet):
-    header = packet[:10]
-    data = packet[10:]
+def getHeader(packet):
+    header = packet[:12]
     header = headerDict(header)
-    dataD = dataDict(header["protocol"], data)
+    return header
+
+def parseData(header, packet):
+    dataD = dataDict(header["protocol"], packet)
     if dataD is not None:
         dataSave(header, dataD)
         
     return None if dataD is None else {**header, **dataD}
 
 def protUnpack(protocol:int, data):
-    protocol_unpack = ["<B", "<Bl", "<BlBfBf"]
+    #"<B", 
+    protocol_unpack = ["<BB4B", "<BB4Bf4BBf", "<BB4Bf4BBff", "<BB4Bf4BBff6f", "<BB4Bf4BBf2000f2000f2000f"] #ToDo TimeStamp vendra vacio. llenarlo al momento de guardar la info en la base de datos
     return unpack(protocol_unpack[protocol], data)
 
 def headerDict(data):
-    M1, M2, M3, M4, M5, M6, protocol, status, leng_msg = unpack("<6B2BH", data)
+    ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBBH", data)
     MAC = ".".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
-    return {"MAC":MAC, "protocol":protocol, "status":status, "length":leng_msg}
+    return {"ID_Device":ID_Device, "MAC":MAC, "protocol":protocol, "transport_layer":transport_layer, "length":leng_msg}
 
 def dataDict(protocol:int, data):
-    if protocol not in [0, 1, 2, 3, 4, 5]:
+    #, 5
+    if protocol not in [0, 1, 2, 3, 4]:
         print("Error: protocol doesnt exist")
         return None
     def protFunc(protocol, keys):
@@ -50,10 +54,14 @@ def dataDict(protocol:int, data):
             unp = protUnpack(protocol, data)
             return {key:val for (key,val) in zip(keys, unp)}
         return p
-    p0 = ["OK"]
-    p1 = ["Batt_level", "Timestamp"]
-    p2 = ["Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co"]
-    p = [p0, p1, p2]
+    p00 = ["OK"]
+    p0 = ["val" ,"Batt_level", "Timestamp"]
+    p1 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co"]
+    p2 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS"]
+    p3 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS", "Amp_X", "Frec_X", "Amp_Y", "Frec_Y", "Amp_Z", "Frec_Z"]
+    p4 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "Acc_X", "Acc_Y", "Acc_Z"]
+    #p00, 
+    p = [p0, p1, p2, p3, p4]
 
     try:
         return protFunc(protocol, p[protocol])(data)
