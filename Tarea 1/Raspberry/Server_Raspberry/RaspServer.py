@@ -26,19 +26,19 @@ while True:
     id_protocol = 0 #ToDo obtener valor de la base de datos
     transport_layer = 0 #ToDo obtener valor de la base de datos
 
-    config = response(False,transport_layer,id_protocol) #ToDo definir valores que empaqueta la funcion response
+    #config = response(False,transport_layer,id_protocol) #ToDo definir valores que empaqueta la funcion response
 
-    conn.send(config.encode())
+    #conn.send(config.encode())
     data = conn.recv(1024)
     #ToDo manejar protocolo p00
     conn.close()
     break
 
 while STOP: # definir como detener el loop
-    if transport_layer == '1':
+    if transport_layer == '0':
         TCP_connection(TCP_HOST,TCP_PORT)
 
-    elif transport_layer == '0':
+    elif transport_layer == '1':
         UDP_connection(UDP_IP,UDP_PORT)
 
     else:

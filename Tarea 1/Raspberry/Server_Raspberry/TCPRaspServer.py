@@ -15,22 +15,36 @@ def TCP_connection(host, port):
     while True:
         conn, addr = s.accept()
         print(f'Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}')
-        paquetes = []
+        paquetes = {}
+        index = []
         while True:
             try:
                 data = conn.recv(1024)
                 if data == b'':
                     break
+
                 header = getHeader(data)
-                if header['protocol'] != '5':
-                    parseData(header,data)
+
+                if header['protocol'] != 4:
+                    parseData(header,data[12:])
                 else:
-                    paquetes.append(data)
-                    #ToDo definir como manejar paquetes fragmentados
+                    if header['val'] != 'f':
+                        if header['val'] is not index:
+                            index.append(header['val'])
+                            paquetes[header['val']] = data[12:] #ToDo probablemente no basta con guardar data directamente en el dict
+                    else:
+                        index.sort() #se ordenan los indices, por si acaso
+                        index.append(len(index)) #se agrega el ultimo indice f
+                        reconstruct_data=''
+                        for i in index:
+                           reconstruct_data += paquetes[i] #se concatenan fragmentos de paquetes
+                        
+                        parseData(header,reconstruct_data) #se parsean los datos y se guardan en la base de datos
+                        
             except ConnectionResetError:
                 break
 
-            print(f"Recibido {data}")
+            #print(f"Recibido {data}")
             #conn.send(data.encode())
 
         conn.close()

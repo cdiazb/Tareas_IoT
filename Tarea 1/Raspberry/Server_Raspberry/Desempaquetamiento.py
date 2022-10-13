@@ -28,15 +28,15 @@ def getHeader(packet):
     return header
 
 def parseData(header, packet):
-    data = packet[12:]
-    dataD = dataDict(header["protocol"], data)
+    dataD = dataDict(header["protocol"], packet)
     if dataD is not None:
         dataSave(header, dataD)
         
     return None if dataD is None else {**header, **dataD}
 
 def protUnpack(protocol:int, data):
-    protocol_unpack = ["<B", "<BB4B", "<BB4Bf4BBf", "<BB4Bf4BBff", "<BB4Bf4BBff6f", "<BB4Bf4BBf2000f2000f2000f"] #ToDo verificar el formato correcto para timestamp
+    #"<B", 
+    protocol_unpack = ["<BB4B", "<BB4Bf4BBf", "<BB4Bf4BBff", "<BB4Bf4BBff6f", "<BB4Bf4BBf2000f2000f2000f"] #ToDo TimeStamp vendra vacio. llenarlo al momento de guardar la info en la base de datos
     return unpack(protocol_unpack[protocol], data)
 
 def headerDict(data):
@@ -45,7 +45,8 @@ def headerDict(data):
     return {"ID_Device":ID_Device, "MAC":MAC, "protocol":protocol, "transport_layer":transport_layer, "length":leng_msg}
 
 def dataDict(protocol:int, data):
-    if protocol not in [0, 1, 2, 3, 4, 5]:
+    #, 5
+    if protocol not in [0, 1, 2, 3, 4]:
         print("Error: protocol doesnt exist")
         return None
     def protFunc(protocol, keys):
@@ -59,7 +60,8 @@ def dataDict(protocol:int, data):
     p2 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS"]
     p3 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS", "Amp_X", "Frec_X", "Amp_Y", "Frec_Y", "Amp_Z", "Frec_Z"]
     p4 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "Acc_X", "Acc_Y", "Acc_Z"]
-    p = [p00, p0, p1, p2, p3, p4]
+    #p00, 
+    p = [p0, p1, p2, p3, p4]
 
     try:
         return protFunc(protocol, p[protocol])(data)
