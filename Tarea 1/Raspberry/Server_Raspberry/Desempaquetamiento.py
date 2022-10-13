@@ -17,10 +17,10 @@ Usamos struct para pasar de un array de bytes a una lista de numeros/strings. (h
 '''
 
     
-def response(change:bool=False, transport_layer:int=255, protocol:int=255):
+def response(change:bool=False, transport_layer:int=255):
     OK = 1
     CHANGE = 1 if change else 0
-    return pack("<BBBB", OK, CHANGE, transport_layer, protocol)
+    return pack("<BBBB", OK, CHANGE, transport_layer)
 
 def getHeader(packet):
     header = packet[:12]

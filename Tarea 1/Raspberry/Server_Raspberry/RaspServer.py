@@ -26,7 +26,7 @@ while True:
     id_protocol = 0 #ToDo obtener valor de la base de datos
     transport_layer = 0 #ToDo obtener valor de la base de datos
 
-    #config = response(False,transport_layer,id_protocol) #ToDo definir valores que empaqueta la funcion response
+    #config = response(False,transport_layer) #ToDo definir valores que empaqueta la funcion response
 
     #conn.send(config.encode())
     data = conn.recv(1024)
