@@ -1,13 +1,13 @@
 #include "sensors.c"
 #include <math.h>
 #include <stdlib.h>
-#include <time.h>
+#include <stdint.h>
 #include "esp_system.h"
 #include "esp_mac.h"
 #include "esp_log.h"
 
-// Largo de la data
-uint16_t DATALENGTH[5] = {6, 16, 20, 44, 24016};
+// Largo de la data, se agrego un bit para los protocolos 1-4 para que calce el dato de humedad
+uint16_t DATALENGTH[5] = {6, 17, 21, 45, 24017};
 
 // Largo de los mensajes incluyendo el header
 uint16_t messageLength(uint16_t protocol){
@@ -106,6 +106,7 @@ char* dataprotocol1(){
 	uint32_t timestamp = 0;
 	float temperatura = thpc_sensor_temp();
 	uint16_t presion = thpc_sensor_pres();
+	uint8_t humedad = thpc_sensor_hum();
 	float co2 = thpc_sensor_co2();
 	
 	mssg[0] = data_1;
@@ -113,7 +114,8 @@ char* dataprotocol1(){
 	memcpy((void*) &(msg[2]), (void*) &timestamp, 4);
 	memcpy((void*) &(msg[6]), (void*) &temperatura, 4);
 	memcpy((void*) &(msg[10]), (void*) &presion, 2);
-	memcpy((void*) &(msg[12]), (void*) &co2, 4);
+	mssg[12] = humedad;
+	memcpy((void*) &(msg[13]), (void*) &co2, 4);
 	return mssg;
 }
 
@@ -125,6 +127,7 @@ char* dataprotocol2(){
 	uint32_t timestamp = 0;
 	float temperatura = thpc_sensor_temp();
 	uint16_t presion = thpc_sensor_pres();
+	uint8_t humedad = thpc_sensor_hum();
 	float co2 = thpc_sensor_co2();
 	float root = rms(acc_kpi_ampx(),acc_kpi_ampy(),acc_kpi_ampz());
 	
@@ -133,8 +136,9 @@ char* dataprotocol2(){
 	memcpy((void*) &(msg[2]), (void*) &timestamp, 4);
 	memcpy((void*) &(msg[6]), (void*) &temperatura, 4);
 	memcpy((void*) &(msg[10]), (void*) &presion, 2);
-	memcpy((void*) &(msg[12]), (void*) &co2, 4);
-	memcpy((void*) &(msg[16]), (void*) &root, 4);
+	mssg[12] = humedad;
+	memcpy((void*) &(msg[13]), (void*) &co2, 4);
+	memcpy((void*) &(msg[17]), (void*) &root, 4);
 	return mssg;
 }
 
@@ -146,6 +150,7 @@ char* dataprotocol3(){
 	uint32_t timestamp = 0;
 	float temperatura = thpc_sensor_temp();
 	uint16_t presion = thpc_sensor_pres();
+	uint8_t humedad = thpc_sensor_hum();
 	float co2 = thpc_sensor_co2();
 	float ampx = acc_kpi_ampx();
 	float ampy = acc_kpi_ampy();
@@ -160,14 +165,15 @@ char* dataprotocol3(){
 	memcpy((void*) &(msg[2]), (void*) &timestamp, 4);
 	memcpy((void*) &(msg[6]), (void*) &temperatura, 4);
 	memcpy((void*) &(msg[10]), (void*) &presion, 2);
-	memcpy((void*) &(msg[12]), (void*) &co2, 4);
-	memcpy((void*) &(msg[16]), (void*) &root, 4);
-	memcpy((void*) &(msg[20]), (void*) &ampx, 4);
-	memcpy((void*) &(msg[24]), (void*) &frecx, 4);
-	memcpy((void*) &(msg[28]), (void*) &ampy, 4);
-	memcpy((void*) &(msg[32]), (void*) &frecy, 4);
-	memcpy((void*) &(msg[36]), (void*) &ampz, 4);
-	memcpy((void*) &(msg[40]), (void*) &frecz, 4);
+	mssg[12] = humedad;
+	memcpy((void*) &(msg[13]), (void*) &co2, 4);
+	memcpy((void*) &(msg[17]), (void*) &root, 4);
+	memcpy((void*) &(msg[21]), (void*) &ampx, 4);
+	memcpy((void*) &(msg[25]), (void*) &frecx, 4);
+	memcpy((void*) &(msg[29]), (void*) &ampy, 4);
+	memcpy((void*) &(msg[33]), (void*) &frecy, 4);
+	memcpy((void*) &(msg[37]), (void*) &ampz, 4);
+	memcpy((void*) &(msg[41]), (void*) &frecz, 4);
 	return mssg;
 }
 
@@ -179,6 +185,7 @@ char* dataprotocol4(){
 	uint32_t timestamp = 0;
 	float temperatura = thpc_sensor_temp();
 	uint16_t presion = thpc_sensor_pres();
+	uint8_t humedad = thpc_sensor_hum();
 	float co2 = thpc_sensor_co2();
 	float* accx = acc_sensor_x();
 	float* accy = acc_sensor_y();
@@ -189,10 +196,11 @@ char* dataprotocol4(){
 	memcpy((void*) &(msg[2]), (void*) &timestamp, 4);
 	memcpy((void*) &(msg[6]), (void*) &temperatura, 4);
 	memcpy((void*) &(msg[10]), (void*) &presion, 2);
-	memcpy((void*) &(msg[12]), (void*) &co2, 4);
-	memcpy((void*) &(msg[16]), (void*) &accx, 8000);
-	memcpy((void*) &(msg[8016]), (void*) &accy, 8000);
-	memcpy((void*) &(msg[1616]), (void*) &accz, 8000);
+	mssg[12] = humedad;
+	memcpy((void*) &(msg[13]), (void*) &co2, 4);
+	memcpy((void*) &(msg[17]), (void*) &accx, 8000);
+	memcpy((void*) &(msg[8017]), (void*) &accy, 8000);
+	memcpy((void*) &(msg[1617]), (void*) &accz, 8000);
 
 	return mssg;
 }

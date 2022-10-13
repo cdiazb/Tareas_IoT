@@ -12,12 +12,10 @@ float rms(float x, float y, float z){
     return sqrtf(powf(x,2) + powf(y,2) + powf(z,2));
 }
 
-
 // Generador de datos sinteticos para el sensor de bateria. 1 byte
 uint8_t batt_sensor(){
     return (uint8_t) (1 + rand() % 100);
 }
-
 
 // Generador de datos sinteticos para el acelerometro, 2000 datos por eje. 8000 bytes cada uno
 // Aceleracion en x
