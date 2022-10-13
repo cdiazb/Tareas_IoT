@@ -6,6 +6,9 @@
 #include "esp_mac.h"
 #include "esp_log.h"
 
+#define PROTOCOL_TCP 0
+#define PROTOCOL_UDP 1
+
 // Largo de la data, se agrego un bit para los protocolos 1-4 para que calce el dato de humedad
 uint16_t DATALENGTH[5] = {6, 17, 21, 45, 24017};
 

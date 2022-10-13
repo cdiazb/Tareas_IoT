@@ -80,16 +80,38 @@ static void tcp_client_task(void)
 
         while (1) {
             // Crearemos un mensaje segun el protocolo, de manera aleatoria
-            payload = create_message(protocol,0);
+            payload = create_message(protocol, PROTOCOL_TCP);
 
-            int err = send(sock, payload, messageLength(protocol), 0);
-            protocol = (protocol != 4) ? ++protocol : 0;
+            // Si enviamos datos de tipo protocol4 tendremos que separar el mensaje en partes de 1024 bytes cada uno
+            if(protocol == 4){
+                int message_size = 1024;
+                int num_packets = 24;
+                char* frag_payload = malloc(message_size);
+                int last_byte = 13;
 
-            if (err < 0) {
-                ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
-                break;
+                // Copiamos el header, utilizaremos el primer bit de los datos para indicar que parte del mesaje estamos mandando
+                memccpy((void*) &frag_payload[0],(void*) &payload, 12);
+                for( int i = 0; i < num_packets; i++){
+                    frag_payload[12] = i;
+                    // Agregamos al fragmento la parte del mensaje original que corresponde
+                    memcpy((void*) &frag_payload[13],(void*) &payload[last_byte], 1011);
+                    int err = send(sock, frag_payload, message_size, 0);
+                    last_byte += 1011;
+                }
+                free(frag_payload);
             }
 
+            else{
+                int err = send(sock, payload, messageLength(protocol), 0);
+
+                if (err < 0) {
+                    ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+                    break;
+                }
+            }
+            
+            // Actualizamos el protocolo que utilizaremos 
+            protocol = (protocol != 4) ? ++protocol : 0;
             int len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
             // Error occurred during receiving
             if (len < 0) {
