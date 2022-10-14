@@ -23,9 +23,11 @@ def UDP_connection(host, port):
                 pass
             header = getHeader(payload)
             if header['protocol'] != '4':
+                print("protocolo: "+ header['protocol'])
                 parseData(header,payload[12:])
             
             else:
+                print("protocolo: "+ header['protocol'])
                 while len(index) != 24:
                     if header['val'] not in index:
                         paquetes[header['val']] = payload[12:] #ToDo probablemente no basta con guardar data directamente en el dict

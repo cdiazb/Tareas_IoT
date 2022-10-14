@@ -32,7 +32,7 @@ while True:
     #ToDo manejar protocolo p00
     conn.close()
 
-    while STOP: # definir como detener el loop
+    while STOP: # ToDo definir como detener el loop
         if transport_layer == '0':
             TCP_connection(TCP_HOST,TCP_PORT)
             break
