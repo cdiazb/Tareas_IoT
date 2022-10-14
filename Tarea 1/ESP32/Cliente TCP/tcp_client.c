@@ -76,7 +76,7 @@ static void tcp_client_task(void)
         ESP_LOGI(TAG, "Successfully connected");
 
         // Por ahora vamos a mandar mensajes de protocolo 0 a 4 ordenadamente para probar
-        char protocol = 0;
+        uint8_t protocol = 0;
 
         while (1) {
             // Crearemos un mensaje segun el protocolo, de manera aleatoria
