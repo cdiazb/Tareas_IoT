@@ -28,18 +28,17 @@ def TCP_connection(host, port):
                 if header['protocol'] != 4:
                     parseData(header,data[12:])
                 else:
-                    if header['val'] != 'f':
-                        if header['val'] is not index:
-                            index.append(header['val'])
+                    while len(index) != 24:
+                        if header['val'] not in index:
                             paquetes[header['val']] = data[12:] #ToDo probablemente no basta con guardar data directamente en el dict
-                    else:
-                        index.sort() #se ordenan los indices, por si acaso
-                        index.append(len(index)) #se agrega el ultimo indice f
-                        reconstruct_data=''
-                        for i in index:
-                           reconstruct_data += paquetes[i] #se concatenan fragmentos de paquetes
-                        
-                        parseData(header,reconstruct_data) #se parsean los datos y se guardan en la base de datos
+                            index.append(header['val'])
+                    
+                    index.sort() #se ordenan los indices, por si acaso
+                    reconstruct_data=''
+                    for i in index:
+                        reconstruct_data += paquetes[i] #se concatenan fragmentos de paquetes
+                    
+                    parseData(header,reconstruct_data) #se parsean los datos y se guardan en la base de datos
                         
             except ConnectionResetError:
                 break
