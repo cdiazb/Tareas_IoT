@@ -27,6 +27,10 @@ def getHeader(packet):
     header = headerDict(header)
     return header
 
+def getlen(protocol:int, paquet):
+    protocol_unpack = ["<BB4B", "<BB4Bf4BBf", "<BB4Bf4BBff", "<BB4Bf4BBff6f", "<BB4Bf4BBf2000f2000f2000f"] #ToDo TimeStamp vendra vacio. llenarlo al momento de guardar la info en la base de datos
+    return unpack(protocol_unpack[protocol], paquet)
+
 def parseData(header, packet):
     dataD = dataDict(header["protocol"], packet)
     if dataD is not None:
