@@ -27,10 +27,6 @@ def getHeader(packet):
     header = headerDict(header)
     return header
 
-def getlen(protocol:int, paquet):
-    protocol_unpack = ["<BB4B", "<BB4Bf4BBf", "<BB4Bf4BBff", "<BB4Bf4BBff6f", "<BB4Bf4BBf2000f2000f2000f"] #ToDo TimeStamp vendra vacio. llenarlo al momento de guardar la info en la base de datos
-    return unpack(protocol_unpack[protocol], paquet)
-
 def parseData(header, packet):
     dataD = dataDict(header["protocol"], packet)
     if dataD is not None:
@@ -44,7 +40,7 @@ def protUnpack(protocol:int, data):
     return unpack(protocol_unpack[protocol], data)
 
 def headerDict(data):
-    ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBBH", data)
+    ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBBH", data)#ToDo revisar formato de unpacking
     MAC = ".".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
     return {"ID_Device":ID_Device, "MAC":MAC, "protocol":protocol, "transport_layer":transport_layer, "length":leng_msg}
 

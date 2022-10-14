@@ -27,9 +27,9 @@ def UDP_connection(host, port):
             
             else:
                 while len(index) != 24:
-                        if header['val'] not in index:
-                            paquetes[header['val']] = payload[12:] #ToDo probablemente no basta con guardar data directamente en el dict
-                            index.append(header['val'])
+                    if header['val'] not in index:
+                        paquetes[header['val']] = payload[12:] #ToDo probablemente no basta con guardar data directamente en el dict
+                        index.append(header['val'])
                     
                 index.sort() #se ordenan los indices, por si acaso
                 reconstruct_data=''
@@ -40,3 +40,5 @@ def UDP_connection(host, port):
                 #ToDo definir como manejar paquetes fragmentados
             print("Echoing data back to " + str(client_address) + ": " + payload)
             #sent = sUDP.sendto(payload, client_address)
+    
+    return None

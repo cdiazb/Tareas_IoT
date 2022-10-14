@@ -23,26 +23,26 @@ print(f"Listening on {TCP_HOST}:{TCP_PORT}")
 while True:
     conn, addr = s.accept()
     print(f'Conectado por alguien ({addr[0]}) desde el puerto {addr[1]}')
-    id_protocol = 0 #ToDo obtener valor de la base de datos
     transport_layer = 0 #ToDo obtener valor de la base de datos
 
     #config = response(False,transport_layer) #ToDo definir valores que empaqueta la funcion response
 
     #conn.send(config.encode())
-    data = conn.recv(1024)
+    #data = conn.recv(1024)
     #ToDo manejar protocolo p00
     conn.close()
-    break
 
-while STOP: # definir como detener el loop
-    if transport_layer == '0':
-        TCP_connection(TCP_HOST,TCP_PORT)
+    while STOP: # definir como detener el loop
+        if transport_layer == '0':
+            TCP_connection(TCP_HOST,TCP_PORT)
+            break
 
-    elif transport_layer == '1':
-        UDP_connection(UDP_IP,UDP_PORT)
+        elif transport_layer == '1':
+            UDP_connection(UDP_IP,UDP_PORT)
+            break
 
-    else:
-        print("Error: protocol doesnt exist")
-        break
+        else:
+            print("Error: protocol doesnt exist")
+            break
 
     

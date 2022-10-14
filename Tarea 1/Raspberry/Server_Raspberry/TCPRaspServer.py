@@ -48,3 +48,4 @@ def TCP_connection(host, port):
 
         conn.close()
         print('Desconectado')
+        return None
