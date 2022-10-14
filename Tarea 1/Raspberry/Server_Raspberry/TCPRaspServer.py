@@ -31,9 +31,9 @@ def TCP_connection(host, port):
                 else:
                     print("protocolo: "+ header['protocol'])
                     while len(index) != 24:
-                        if header['val'] not in index:
-                            paquetes[header['val']] = data[12:] #ToDo probablemente no basta con guardar data directamente en el dict
-                            index.append(header['val'])
+                        if header['Data1'] not in index:
+                            paquetes[header['Data1']] = data[12:] #ToDo probablemente no basta con guardar data directamente en el dict
+                            index.append(header['Data1'])
                     
                     index.sort() #se ordenan los indices, por si acaso
                     reconstruct_data=''

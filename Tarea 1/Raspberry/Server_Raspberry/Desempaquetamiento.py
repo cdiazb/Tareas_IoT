@@ -25,12 +25,16 @@ def response(change:bool=False, transport_layer:int=255):
 def getHeader(packet):
     header = packet[:12]
     header = headerDict(header)
+    print(header)
     return header
 
 def parseData(header, packet):
     dataD = dataDict(header["protocol"], packet)
     if dataD is not None:
-        dataSave(header, dataD)
+        #dataSave(header, dataD)
+        print(header)
+        print(dataD)
+        
         
     return None if dataD is None else {**header, **dataD}
 
@@ -40,7 +44,7 @@ def protUnpack(protocol:int, data):
     return unpack(protocol_unpack[protocol], data)
 
 def headerDict(data):
-    ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBBH", data)#ToDo revisar formato de unpacking
+    ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBB2B", data)#ToDo revisar formato de unpacking
     MAC = ".".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
     return {"ID_Device":ID_Device, "MAC":MAC, "protocol":protocol, "transport_layer":transport_layer, "length":leng_msg}
 
