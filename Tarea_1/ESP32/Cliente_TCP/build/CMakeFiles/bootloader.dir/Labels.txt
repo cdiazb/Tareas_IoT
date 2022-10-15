@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/CMakeFiles/bootloader
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/CMakeFiles/bootloader.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/CMakeFiles/bootloader-complete.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/claudio/U/IoT/Tareas_IoT/Tarea_1/ESP32/Cliente_TCP/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
