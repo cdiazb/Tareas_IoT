@@ -1,4 +1,5 @@
 from struct import unpack, pack
+from pickle import dumps, loads
 import traceback
 from DatabaseWork import * 
 
@@ -56,7 +57,13 @@ def dataDict(protocol:int, data):
     def protFunc(protocol, keys):
         def p(data):
             unp = protUnpack(protocol, data)
-            return {key:val for (key,val) in zip(keys, unp)}
+            data_dict = {}
+            for (key,val) in zip(keys,unp):
+                if key in ["Acc_X", "Acc_Y", "Acc_Z"]:
+                    data_dict[key] = dumps(val)
+                else:
+                    data_dict[key] = val
+            return data_dict
         return p
     p00 = ["OK"]
     p0 = ["val" ,"Batt_level", "Timestamp"]
