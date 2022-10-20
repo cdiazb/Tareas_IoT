@@ -30,7 +30,7 @@ def getHeader(packet):
     return header
 
 def parseData(header, packet):
-    dataD = dataDict(header["protocol"], packet)
+    dataD = dataDict(header["ID_protocol"], packet)
     if dataD is not None:
         #dataSave(header, dataD)
         print(header)
@@ -65,7 +65,7 @@ def dataDict(protocol:int, data):
                     data_dict[key] = val
             return data_dict
         return p
-    p00 = ["OK"]
+    p00 = ["OK"] #ToDo definir este protocolo 00 y eliminar timestamp
     p0 = ["Data1" ,"Batt_level", "Timestamp"]
     p1 = ["Data1" ,"Batt_level", "Timestamp", "Temp", "Press", "Hum", "Co"]
     p2 = ["Data1" ,"Batt_level", "Timestamp", "Temp", "Press", "Hum", "Co", "RMS"]

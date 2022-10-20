@@ -25,11 +25,11 @@ def TCP_connection(host, port):
 
                 header = getHeader(data)
 
-                if header['protocol'] != 4:
-                    print("protocolo: "+ header['protocol'])
+                if  header['ID_protocol'] != 4:
+                    print("protocolo: "+  header['ID_protocol'])
                     parseData(header,data[12:])
                 else:
-                    print("protocolo: "+ header['protocol'])
+                    print("protocolo: "+  header['ID_protocol'])
                     while len(index) != 24:
                         if header['Data1'] not in index:
                             paquetes[header['Data1']] = data[12:] #ToDo probablemente no basta con guardar data directamente en el dict
