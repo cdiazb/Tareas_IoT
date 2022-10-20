@@ -19,10 +19,8 @@ Usamos struct para pasar de un array de bytes a una lista de numeros/strings. (h
 '''
 
     
-def response(change:bool=False, transport_layer:int=255):
-    OK = 1
-    CHANGE = 1 if change else 0
-    return pack("<BBBB", OK, CHANGE, transport_layer)
+def response(ID_protocol:int, transport_layer:int):
+    return pack("<BB", ID_protocol,transport_layer)
 
 def getHeader(packet):
     header = packet[:12]
@@ -33,10 +31,9 @@ def getHeader(packet):
 def parseData(header, packet):
     dataD = dataDict(header["ID_protocol"], packet)
     if dataD is not None:
-        #dataSave(header, dataD)
+        dataSave(header, dataD)
         print(header)
         print(dataD)
-        
         
     return None if dataD is None else {**header, **dataD}
 

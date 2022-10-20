@@ -39,14 +39,13 @@ def TCP_connection(host, port):
                     reconstruct_data=''
                     for i in index:
                         reconstruct_data += paquetes[i] #se concatenan fragmentos de paquetes
-                    
+
+                    paquetes.clear()
+                    index.clear()
                     parseData(header,reconstruct_data) #se parsean los datos y se guardan en la base de datos
                         
             except ConnectionResetError:
                 break
-
-            #print(f"Recibido {data}")
-            #conn.send(data.encode())
 
         conn.close()
         print('Desconectado')
