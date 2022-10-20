@@ -1,5 +1,6 @@
 from struct import unpack, pack
 from pickle import dumps, loads
+import datetime
 import traceback
 from DatabaseWork import * 
 
@@ -59,6 +60,8 @@ def dataDict(protocol:int, data):
             unp = protUnpack(protocol, data)
             data_dict = {}
             for (key,val) in zip(keys,unp):
+                if key == "Timestamp":
+                    data_dict[key] = datetime.datetime.now()
                 if key in ["Acc_X", "Acc_Y", "Acc_Z"]:
                     data_dict[key] = dumps(val)
                 else:
