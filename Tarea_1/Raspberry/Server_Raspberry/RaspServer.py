@@ -8,9 +8,9 @@ from UDPRaspServer import *
 from DatabaseWork import *
 
 # "192.168.5.177"  # Standard loopback interface address (localhost)
-TCP_HOST = "192.168.5.177"#"localhost"
+TCP_HOST = "192.168.4.1"#"localhost"
 TCP_PORT = 5000  # Port to listen on (non-privileged ports are > 1023)
-UDP_IP = "192.168.5.177"# "localhost" 
+UDP_IP = "192.168.4.1"# "localhost" 
 UDP_PORT = 5010
 STOP = True
 
