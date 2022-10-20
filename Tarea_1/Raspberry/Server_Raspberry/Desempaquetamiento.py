@@ -47,7 +47,7 @@ def protUnpack(protocol:int, data):
 def headerDict(data):
     ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBB2B", data)#ToDo revisar formato de unpacking
     MAC = ".".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
-    return {"ID_Device":ID_Device, "MAC":MAC, "protocol":protocol, "transport_layer":transport_layer, "length":leng_msg}
+    return {"ID_device":ID_Device, "MAC":MAC, "ID_protocol":protocol, "Transport_layer":transport_layer, "length":leng_msg}
 
 def dataDict(protocol:int, data):
     #, 5
@@ -66,11 +66,11 @@ def dataDict(protocol:int, data):
             return data_dict
         return p
     p00 = ["OK"]
-    p0 = ["val" ,"Batt_level", "Timestamp"]
-    p1 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co"]
-    p2 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS"]
-    p3 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "RMS", "Amp_X", "Frec_X", "Amp_Y", "Frec_Y", "Amp_Z", "Frec_Z"]
-    p4 = ["val" ,"Batt_level", "Timestamp", "Temp", "Pres", "Hum", "Co", "Acc_X", "Acc_Y", "Acc_Z"]
+    p0 = ["Data1" ,"Batt_level", "Timestamp"]
+    p1 = ["Data1" ,"Batt_level", "Timestamp", "Temp", "Press", "Hum", "Co"]
+    p2 = ["Data1" ,"Batt_level", "Timestamp", "Temp", "Press", "Hum", "Co", "RMS"]
+    p3 = ["Data1" ,"Batt_level", "Timestamp", "Temp", "Press", "Hum", "Co", "RMS", "Amp_X", "Frec_X", "Amp_Y", "Frec_Y", "Amp_Z", "Frec_Z"]
+    p4 = ["Data1" ,"Batt_level", "Timestamp", "Temp", "Press", "Hum", "Co", "Acc_X", "Acc_Y", "Acc_Z"]
     #p00, 
     p = [p0, p1, p2, p3, p4]
 
