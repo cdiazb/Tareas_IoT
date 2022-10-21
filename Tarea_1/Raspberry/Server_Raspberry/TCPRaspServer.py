@@ -26,14 +26,16 @@ def TCP_connection(host, port):
                 header = getHeader(data)
 
                 if  header['ID_protocol'] != 4:
-                    print("protocolo: "+  header['ID_protocol'])
                     parseData(header,data[12:])
                 else:
-                    print("protocolo: "+  header['ID_protocol'])
                     while len(index) != 24:
-                        if header['Data1'] not in index:
-                            paquetes[header['Data1']] = data[12:] #ToDo probablemente no basta con guardar data directamente en el dict
-                            index.append(header['Data1'])
+                        i = getData(data[12:])
+                        if i not in index:
+                            if i == 0:
+                                paquetes[i] = data[12:]
+                            else:
+                                paquetes[i] = data[13:] #ToDo probablemente no basta con guardar data directamente en el dict
+                            index.append(i)
                     
                     index.sort() #se ordenan los indices, por si acaso
                     reconstruct_data=''
@@ -46,7 +48,7 @@ def TCP_connection(host, port):
                         
             except ConnectionResetError:
                 break
-
+            conn.send("Recibido".encode())
         conn.close()
         print('Desconectado')
-        return None
+    return None

@@ -25,6 +25,8 @@
 #include "addr_from_stdin.h"
 #include "esp_sleep.h"
 
+
+
 #if defined(CONFIG_EXAMPLE_SOCKET_IP_INPUT_STDIN)
 #include "addr_from_stdin.h"
 #endif
@@ -80,6 +82,7 @@ static void tcp_client_task(void)
         uint8_t protocol = 0;
 
         while (1) {
+            ESP_LOGI(TAG, "Protocolo %i", protocol);
             // Crearemos un mensaje segun el protocolo, de manera aleatoria
             payload = create_message(protocol, PROTOCOL_TCP);
 
@@ -91,11 +94,11 @@ static void tcp_client_task(void)
                 int last_byte = 13;
 
                 // Copiamos el header, utilizaremos el primer bit de los datos para indicar que parte del mesaje estamos mandando
-                memcpy((void*) &frag_payload[0],(void*) payload, 12);
+                memcpy((void*) &(frag_payload[0]),(void*) payload, 12);
                 for( int i = 0; i < num_packets; i++){
                     frag_payload[12] = i;
                     // Agregamos al fragmento la parte del mensaje original que corresponde
-                    memcpy((void*) &frag_payload[13],(void*) payload[last_byte], 1011);
+                    memcpy((void*) &(frag_payload[13]),(void*) &payload[last_byte], 1011);
                     int err = send(sock, frag_payload, message_size, 0);
                     last_byte += 1011;
                 }
@@ -113,7 +116,7 @@ static void tcp_client_task(void)
             
             // Actualizamos el protocolo que utilizaremos 
             if(protocol!=4){
-                ++protocol;
+                protocol++;
             }
             else protocol =0;
             int len = recv(sock, rx_buffer, sizeof(rx_buffer) - 1, 0);
@@ -129,11 +132,12 @@ static void tcp_client_task(void)
                 ESP_LOGI(TAG, "%s", rx_buffer);
             }
         }
+        // // Dormimos por un minuto y luego enviamos un nuevo mensaje o esperamos terminacion del programa
+        // printf("Going to sleep for a minute");
+        // esp_sleep_enable_timer_wakeup(10*1000000);
+        // esp_deep_sleep_start();
 
-        // Dormimos por un minuto y luego enviamos un nuevo mensaje o esperamos terminacion del programa
-        printf("Going to sleep for a minute");
-        esp_sleep_enable_timer_wakeup(60*1000000);
-        esp_deep_sleep_start();
+
 
         if (sock != -1) {
             ESP_LOGE(TAG, "Shutting down socket and restarting...");
@@ -142,5 +146,20 @@ static void tcp_client_task(void)
         }
     }
     vTaskDelete(NULL);
+}
+
+void app_main(void)
+{
+    ESP_ERROR_CHECK(nvs_flash_init());
+    ESP_ERROR_CHECK(esp_netif_init());
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+    /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
+     * Read "Establishing Wi-Fi or Ethernet Connection" section in
+     * examples/protocols/README.md for more information about this function.
+     */
+    ESP_ERROR_CHECK(example_connect());
+
+    xTaskCreate(tcp_client_task, "tcp_client", 4096, NULL, 5, NULL);
 }
 

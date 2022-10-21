@@ -24,6 +24,7 @@
 #include "lwip/sys.h"
 #include <lwip/netdb.h>
 #include "addr_from_stdin.h"
+#include "../../Datos/packeting.c"
 
 #if defined(CONFIG_EXAMPLE_IPV4)
 #define HOST_IP_ADDR CONFIG_EXAMPLE_IPV4_ADDR
@@ -82,9 +83,9 @@ static void udp_client_task(void *pvParameters)
 
         ESP_LOGI(TAG, "Socket created, sending to %s:%d", HOST_IP_ADDR, PORT);
 
-        uint8_t protocol = 0;
+        uint16_t protocol = 0;
         while (1) {
-            payload = create_message(protocol, PROTOCOL_TCP);
+            payload = create_message(protocol, 1);
 
             if(protocol == 4){                
                 int message_size = 1024;
@@ -93,7 +94,7 @@ static void udp_client_task(void *pvParameters)
                 int last_byte = 13;
 
                 // Copiamos el header, utilizaremos el primer bit de los datos para indicar que parte del mesaje estamos mandando
-                memccpy((void*) &frag_payload[0],(void*) &payload, 12);
+                memcpy((void*) &frag_payload[0],(void*) &payload, 12);
                 for( int i = 0; i < num_packets; i++){
                     frag_payload[12] = i;
                     // Agregamos al fragmento la parte del mensaje original que corresponde
@@ -157,7 +158,10 @@ static void udp_client_task(void *pvParameters)
             }
             
             // Rotamos los mensajes que se enviaran
-            protocol = (protocol != 4) ? ++protocol : 0;
+            if(protocol != 4){
+                protocol =0;
+            }
+            else protocol++;
 
             vTaskDelay(2000 / portTICK_PERIOD_MS);
         }

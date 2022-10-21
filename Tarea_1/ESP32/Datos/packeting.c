@@ -109,7 +109,7 @@ char* dataprotocol2(){
 
 // Arma un paquete para el protocolo 3: Bateria, timestamp, temperatura, presion, humedad, CO2, RMS, amplitudes y frecuencias
 char* dataprotocol3(){
-	char* mssg = malloc(DATALENGTH[2]);
+	char* mssg = malloc(DATALENGTH[3]);
 	uint8_t data_1 = 1;
 	uint8_t bateria = batt_sensor();
 	uint32_t timestamp = 0;

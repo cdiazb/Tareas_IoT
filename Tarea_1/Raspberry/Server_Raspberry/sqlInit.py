@@ -34,7 +34,7 @@ create_datos = '''CREATE TABLE Datos (
 );'''
 
 create_logs = '''CREATE TABLE LOGS (
-    ID_device TEXT PRIMARY KEY,
+    ID_device TEXT,
     Transport_layer INTEGER NOT NULL,
     Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     ID_protocol INTEGER NOT NULL,
@@ -43,7 +43,7 @@ create_logs = '''CREATE TABLE LOGS (
 
 create_config = '''CREATE TABLE Config (
     ID_protocol TEXT,
-    Transport_layer INTEGER NOT NULL,
+    Transport_layer INTEGER NOT NULL
 );'''
 
 import sqlite3 as sql

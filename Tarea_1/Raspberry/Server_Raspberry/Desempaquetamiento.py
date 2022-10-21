@@ -32,18 +32,24 @@ def parseData(header, packet):
     dataD = dataDict(header["ID_protocol"], packet)
     if dataD is not None:
         dataSave(header, dataD)
-        print(header)
         print(dataD)
         
     return None if dataD is None else {**header, **dataD}
 
+def getData(packet):
+    d1 = packet[0]
+    dataD = d1 #unpack("<B",d1)
+    return dataD
+
 def protUnpack(protocol:int, data):
     #"<B", 
-    protocol_unpack = ["<BB4B", "<BB4Bf4BBf", "<BB4Bf4BBff", "<BB4Bf4BBff6f", "<BB4Bf4BBf2000f2000f2000f"] #ToDo TimeStamp vendra vacio. llenarlo al momento de guardar la info en la base de datos
+    protocol_unpack = ["<BB4B", "<BB4Bf2BBf", "<BB4Bf2BBff", "<BB4Bf2BBffffffff", "<BB4Bf2BBf2000f2000f2000f"] #ToDo TimeStamp vendra vacio. llenarlo al momento de guardar la info en la base de datos
     return unpack(protocol_unpack[protocol], data)
 
 def headerDict(data):
-    ID_Device, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg = unpack("<2B6BBB2B", data)#ToDo revisar formato de unpacking
+    ID_Device1, ID_Device2, M1, M2, M3, M4, M5, M6, transport_layer, protocol, leng_msg1, leng_msg2 = unpack("<2B6BBB2B", data)#ToDo revisar formato de unpacking
+    ID_Device = str(ID_Device1)+str(ID_Device2)
+    leng_msg = int(leng_msg1)+int(leng_msg2)
     MAC = ".".join([hex(x)[2:] for x in [M1, M2, M3, M4, M5, M6]])
     return {"ID_device":ID_Device, "MAC":MAC, "ID_protocol":protocol, "Transport_layer":transport_layer, "length":leng_msg}
 
@@ -59,7 +65,7 @@ def dataDict(protocol:int, data):
             for (key,val) in zip(keys,unp):
                 if key == "Timestamp":
                     data_dict[key] = datetime.datetime.now()
-                if key in ["Acc_X", "Acc_Y", "Acc_Z"]:
+                elif key in ["Acc_X", "Acc_Y", "Acc_Z"]:
                     data_dict[key] = dumps(val)
                 else:
                     data_dict[key] = val
