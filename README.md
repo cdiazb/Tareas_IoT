@@ -10,3 +10,9 @@ Para lograr esto se deberá poder conectar via wifi el ESP32 a la Rpi, programar
 Para esta tarea se deberén crear los datos de manera sintética y los paquetes enviados deberán seguir la forma especificada en el enunciado.
 
 **Para los últimos tres datos de la tabla 3 debiesen ser 8000 bytes cada uno**
+
+
+Integrantes:
+  - Critobal Díaz
+  - Claudio Zamorano
+  - Roberto Aguilera
