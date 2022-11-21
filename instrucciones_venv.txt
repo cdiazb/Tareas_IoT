@@ -1,0 +1,19 @@
+ - $ c:\>python -m venv c:\path\to\myenv [python -m venv venv] -> crear ambiente virtual}
+
+windows:
+ - $ C:\> <venv>\Scripts\activate.bat [venv\Scripts\activate.bat] *en cmd -> activar ambiente virtual
+ - $ deactivate -> desactivar ambiente virtual
+
+linux:
+
+ - $ source <venv>/bin/activate ->activar ambiente virtual
+
+
+
+###############
+
+- $ pip install pyqt5 qt5-tools
+
+- $ pip freeze > requirements.txt
+
+- $ pyuic5 -x Tarea_2\gui_t2.ui -o Tarea_2\Raspberry\Server_Raspberry\gui.py

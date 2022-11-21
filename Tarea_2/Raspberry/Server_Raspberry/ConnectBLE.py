@@ -1,4 +1,6 @@
 from findAddresses import findAddresses
+from gui import Ui_Dialog
+from PyQt5 import QtCore, QtWidgets, QtGui
 import pygatt
 import time
 import pyqtgraph as pg
@@ -84,3 +86,17 @@ class GUIController:
                 time.sleep(1)
             finally:
                 self.adapter.stop()
+
+
+
+if __name__=="__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Dialog = QtWidgets.QDialog()
+    cont = GUIController(Dialog)
+    ui = cont.ui
+    ui.setupUi(Dialog)
+    Dialog.show()
+    cont.setSignals()
+
+    sys.exit(app.exec())
