@@ -1,3 +1,6 @@
+# Python virtual enviroment
+venv
+
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
