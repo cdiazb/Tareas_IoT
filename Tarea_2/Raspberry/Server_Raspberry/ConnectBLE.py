@@ -76,7 +76,7 @@ class GUIController:
                 # La siguiente linea es para escribir en la caracteristica de UUID list(characteristics)[4], puede hardcodear si
                 # sabe la UUID de la caracteristica a escribir, este misma funcion para leer es tan solo char_read
                 # Recomiendo leer acerca del sistema de Subscribe para recibir notificaciones del cambio u otros
-                device.char_write(list(characteristics)[4], pack)
+                device.char_read(list(characteristics)[4], pack)
                 print("Se escribio el paquete")
                 qty = 100
             except pygatt.exceptions.NotConnectedError:
@@ -97,6 +97,6 @@ if __name__=="__main__":
     ui = cont.ui
     ui.setupUi(Dialog)
     Dialog.show()
-    cont.setSignals()
+    #cont.setSignals()
 
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
