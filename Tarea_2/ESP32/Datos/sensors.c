@@ -17,34 +17,24 @@ uint8_t batt_sensor(){
     return (uint8_t) (1 + rand() % 100);
 }
 
-// Generador de datos sinteticos para el acelerometro, 2000 datos por eje. 8000 bytes cada uno
-// Aceleracion en x
-float* acc_sensor_x(){
+// Generador de datos sinteticos para el acelerometro, 2000 datos por eje y cuenta con aceleracion y velocidad angular. 8000 bytes cada uno
+// Servira para aceleraciones en los tres ejes(X,Y,Z). Valores van entre -16 y 16.
+float* acc_sensor_acc(){
     float* arr = malloc(2000 * sizeof(float));
     for (int i = 0 ; i < 2000; i++){
-        arr[i] = 2 * sin(0.002 * M_PI * rand());
+        arr[i] = floatrand(-16,16);
     }
     return arr;
 }
 
-// Aceleracion en y
-float* acc_sensor_y(){
+// Servira para velocidad angular en los tres ejes(X,Y,Z). Valores van entre -1000 y 1000
+float* acc_sensor_rgyr(){
     float* arr = malloc(2000 * sizeof(float));
-    for (int i = 0; i < 2000; i++ ){
-        arr[i] = 3 * cos(0.002 * M_PI * rand());
+    for (int i = 0; i < 2000, i++){
+        arr[i] = floatrand(-1000,1000);
     }
     return arr;
 }
-
-// Aceleracion en z
-float* acc_sensor_z(){
-    float* arr = malloc(2000 * sizeof(float));
-    for (int i = 0; i < 2000; i++ ){
-        arr[i] = 10 * sin(0.002 * M_PI * rand());
-    }
-    return arr;
-}
-
 
 // Generador de datos sinteticos para el sensor THPC
 // Temperatura, se podria codificar los valores para usar un datatype menos costoso. 1 byte **
