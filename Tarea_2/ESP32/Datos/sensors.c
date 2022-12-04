@@ -37,22 +37,22 @@ float* acc_sensor_rgyr(){
 }
 
 // Generador de datos sinteticos para el sensor THPC
-// Temperatura, se podria codificar los valores para usar un datatype menos costoso. 1 byte **
-float thpc_sensor_temp(){
-    return floatrand(5.0, 30.0);
+// Temperatura, valores enteros van entre 5 y 30. 1 byte
+uint8_t thpc_sensor_temp(){
+    return 5 + rand() % 26;
 }
 
-// Humedad. 1 byte
+// Humedad, valores enteros van entre 30 y 80. 1 byte
 uint8_t thpc_sensor_hum(){
     return 30 + rand() % 51;
 }
 
-// Presion, podemos codificar los valores para usar un datatype menos costoso. 4 bytes **
-uint16_t thpc_sensor_pres(){
+// Presion, valores enteros entre 1000 y 1200 podemos codificar los valores para usar un datatype menos costoso. 4 bytes
+int thpc_sensor_pres(){
     return 1000 + rand() % 201;
 }
 
-// CO2, se podria codificar los valores para usar un datatype menos costoso. 4 bytes
+// CO2, valores float van entre 30 y 200. 4 bytes
 float thpc_sensor_co2(){
     return floatrand(30.0, 200.0);
 }
