@@ -13,6 +13,7 @@ class GUIController:
     def __init__(self, parent):
         self.ui = Ui_Dialog()
         self.parent = parent
+        self.names = []
         self.macs = []
         self.UUIDs = []
         self.servers = []
@@ -22,19 +23,25 @@ class GUIController:
 
         self.adapter = pygatt.GATTToolBackend() ##pygatt
         print()
+
+    def searchEsp32(self):
+        self.ui.search_esp32.clicked.connect(self.actualizarMacs)
+        
         
     def actualizarMacs(self):
         # actualiza la lista de dispositivos con bluetooth disponibles
         adrs = findAddresses()
+        self.names = adrs[0]
         self.macs = adrs[1]
         self.UUIDs = adrs[2]
-        self.ui.selec_7.clear()
-        self.ui.selec_7.addItems(adrs[0])
-        #print()
+        self.ui.esp32_select.clear()
+        self.ui.esp32_select.addItems(adrs[0])
+        print(self.macs)
+
 
     def conectarMac(self):
         # se conecta mediante BLE a un dispostivo disponible
-        indx = self.ui.selec_7.currentIndex()
+        indx = self.ui.esp32_select.currentIndex()
         self.macindx = indx
         ##pygatt
         logging.basicConfig()
@@ -97,6 +104,6 @@ if __name__=="__main__":
     ui = cont.ui
     ui.setupUi(Dialog)
     Dialog.show()
-    #cont.setSignals()
+    cont.searchEsp32()
 
     sys.exit(app.exec_())
